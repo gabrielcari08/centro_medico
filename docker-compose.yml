@@ -1,0 +1,80 @@
+# Versión de la especificación del esquema de Docker Compose
+version: "3.8"
+
+services:
+  # ============================================================================
+  # SERVICIO 1: Base de Datos PostgreSQL (Infraestructura de almacenamiento)
+  # ============================================================================
+  db:
+    # Descarga la imagen oficial de PostgreSQL 16 sobre una distribución ultra ligera (Alpine Linux)
+    image: postgres:16-alpine
+
+    # Asigna un nombre claro al contenedor ejecutable en Docker
+    container_name: postgres_db
+
+    # Reinicia automáticamente el contenedor si este falla o si se reinicia Docker
+    restart: always
+
+    # Define las variables de entorno internas requeridas por PostgreSQL para crear usuario y base de datos
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-app_db}
+
+    # Mapea el puerto 5432 del contenedor hacia el puerto 5432 de la máquina anfitriona (necesario para DBeaver)
+    ports:
+      - "5432:5432"
+
+    # Asocia un volumen administrado para persistir la información almacenada en PostgreSQL en el disco físico
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    # Verifica continuamente si PostgreSQL está listo para responder consultas antes de permitir la conexión de la API
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-app_db}",
+        ]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+
+  # ============================================================================
+  # SERVICIO 2: API Web FastAPI (Capa de Entrypoints y Lógica de Negocio)
+  # ============================================================================
+  api:
+    # Indica que debe construir la imagen usando el Dockerfile de la raíz del proyecto
+    build:
+      context: .
+      target: runner
+
+    # Asigna un nombre identificativo al contenedor de la API
+    container_name: fastapi_clean_api
+
+    # Reinicia la aplicación si se produce una falla no controlada
+    restart: always
+
+    # Sobrescribe el comando por defecto para incluir la bandera --reload (Hot-Reloading en tiempo real)
+    command: uvicorn app.entrypoints.api.v1.main:app --host 0.0.0.0 --port 8000 --reload
+
+    # Mapea el puerto 8000 del contenedor hacia el puerto 8000 de tu máquina local (HTTP Web)
+    ports:
+      - "8000:8000"
+
+    # Vincula la carpeta local ./app con la del contenedor para refrescar el código automáticamente al guardar
+    volumes:
+      - ./app:/app/app
+
+    # Pasa la variable de conexión a la base de datos usando el nombre de host interno 'db'
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-app_db}
+
+    # Establece dependencia estricta: La API solo arrancará cuando el servicio 'db' esté verificado como 'healthy'
+    depends_on:
+      db:
+        condition: service_healthy
+
+# Declaración de volúmenes persistentes a nivel global
+volumes:
+  postgres_data:
