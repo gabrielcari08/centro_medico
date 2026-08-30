@@ -17,9 +17,9 @@
 - `requirements.txt` (add `fastapi`, `uvicorn`, `sqlalchemy`, `psycopg2-binary`, `pydantic`, `pydantic-settings`, `passlib[bcrypt]`, `python-jose`, `pytest`, `httpx`, `ruff`, `mypy`)
 - `tests/__init__.py`, `tests/domain/__init__.py`, `tests/application/__init__.py`, `tests/infrastructure/__init__.py`, `tests/entrypoints/__init__.py`
 **Checkboxes:**
-- [ ] Create all `__init__.py` and folders exactly as `plan.md §2`
-- [ ] Add dependencies to `requirements.txt`
-- [ ] Verify `python -c "import app"` succeeds
+- [x] Create all `__init__.py` and folders exactly as `plan.md §2`
+- [x] Add dependencies to `requirements.txt`
+- [x] Verify `python -c "import app"` succeeds
 **Done when:** `bash: ls app/domain/entities app/application/dtos app/infrastructure/db/models app/entrypoints/api/v1/routes` lists all folders; `pip install -r requirements.txt` exits 0.
 
 #### Task 0.2: Configure Settings and database session
@@ -30,9 +30,9 @@
 - `app/infrastructure/db/session.py`
 - `.env` (already exists — verify not overwritten)
 **Checkboxes:**
-- [ ] Implement `Settings(BaseSettings)` with `NAME`, `PASSWORD`, `DATABASE_URL`, `SECRET_KEY`, `env_file=".env"`
-- [ ] Implement `Base = declarative_base()` and `get_session()` / `SessionLocal`
-- [ ] Ensure `.env` is in `.gitignore` (already present — verify)
+- [x] Implement `Settings(BaseSettings)` with `NAME`, `PASSWORD`, `DATABASE_URL`, `SECRET_KEY`, `env_file=".env"`
+- [x] Implement `Base = declarative_base()` and `get_session()` / `SessionLocal`
+- [x] Ensure `.env` is in `.gitignore` (already present — verify)
 **Done when:** `bash: python -c "from app.infrastructure.config.settings import Settings; s=Settings(); assert s.NAME=='Gabriel Cari'; assert s.PASSWORD=='gabi12345'"` passes; `bash: python -c "from app.infrastructure.db.session import SessionLocal; print('ok')"` passes.
 
 ---
@@ -211,8 +211,8 @@
 
 ### Task Completion Checklist (for tracking)
 
-- [ ] 0.1 Scaffolding & dependencies
-- [ ] 0.2 Settings & DB session
+- [x] 0.1 Scaffolding & dependencies
+- [x] 0.2 Settings & DB session
 - [ ] 1.1 User entity & role
 - [ ] 1.2 Domain exceptions
 - [ ] 1.3 Repository/service ports
