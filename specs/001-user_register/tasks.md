@@ -44,9 +44,9 @@
 **Files to create/touch:**
 - `app/domain/entities/user.py`
 **Checkboxes:**
-- [ ] Define `UserRole` enum (`ADMINISTRATOR`, `RECEPTIONIST`, `PROFESSIONAL`) — English names, string values
-- [ ] Define `@dataclass User` with fields: `id`, `name`, `last_name`, `dni`, `email`, `phone`, `password_hash`, `role`, `cedula`, `is_active`, `created_at`
-- [ ] Add `__post_init__` invariants: `PROFESSIONAL ↔ cedula is not None`, strip non-empty checks (no Pydantic/SQLAlchemy imports)
+- [x] Define `UserRole` enum (`ADMINISTRATOR`, `RECEPTIONIST`, `PROFESSIONAL`) — English names, string values
+- [x] Define `@dataclass User` with fields: `id`, `name`, `last_name`, `dni`, `email`, `phone`, `password_hash`, `role`, `cedula`, `is_active`, `created_at`
+- [x] Add `__post_init__` invariants: `PROFESSIONAL ↔ cedula is not None`, strip non-empty checks (no Pydantic/SQLAlchemy imports)
 **Done when:** `bash: pytest tests/domain/test_user_entity.py -k test_invariants -v` passes (create minimal test file to verify `User(role=RECEPTIONIST, cedula="ABC1234")` raises, `User(role=PROFESSIONAL, cedula=None)` raises, `User(is_active=True)` default).
 
 #### Task 1.2: Define domain exceptions
@@ -54,7 +54,7 @@
 **Files to create/touch:**
 - `app/domain/exceptions/user_exceptions.py`
 **Checkboxes:**
-- [ ] Create `DuplicateEmailException`, `DuplicateUserException`, `MissingFieldsException`, `InvalidFormatException`, `PasswordTooShortException`, `UnauthorizedException`, `ForbiddenException` (each with spec literal as default message)
+- [x] Create `DuplicateEmailException`, `DuplicateUserException`, `MissingFieldsException`, `InvalidFormatException`, `PasswordTooShortException`, `UnauthorizedException`, `ForbiddenException` (each with spec literal as default message)
 **Done when:** `bash: python -c "from app.domain.exceptions.user_exceptions import DuplicateEmailException; assert str(DuplicateEmailException())=='email ya registrado'"` passes.
 
 #### Task 1.3: Define repository and service ports (ABC)
@@ -63,8 +63,8 @@
 - `app/domain/repositories/user_repository.py`
 - `app/domain/services/password_service.py`
 **Checkboxes:**
-- [ ] Define `UserRepository(ABC)` with `get_by_email`, `get_by_dni`, `get_by_phone`, `get_by_cedula`, `exists_by_email`, `exists_by_dni`, `exists_by_phone`, `exists_by_cedula`, `save`, `exists_by_role` (for admin seed)
-- [ ] Define `PasswordService(ABC)` with `hash(plain) -> str` and `verify(plain, hashed) -> bool`
+- [x] Define `UserRepository(ABC)` with `get_by_email`, `get_by_dni`, `get_by_phone`, `get_by_cedula`, `exists_by_email`, `exists_by_dni`, `exists_by_phone`, `exists_by_cedula`, `save`, `exists_by_role` (for admin seed)
+- [x] Define `PasswordService(ABC)` with `hash(plain) -> str` and `verify(plain, hashed) -> bool`
 **Done when:** `bash: python -c "from app.domain.repositories.user_repository import UserRepository; from app.domain.services.password_service import PasswordService; print('ports ok')"` passes; `mypy app/domain --ignore-missing-imports` passes.
 
 ---
@@ -213,9 +213,9 @@
 
 - [x] 0.1 Scaffolding & dependencies
 - [x] 0.2 Settings & DB session
-- [ ] 1.1 User entity & role
-- [ ] 1.2 Domain exceptions
-- [ ] 1.3 Repository/service ports
+- [x] 1.1 User entity & role
+- [x] 1.2 Domain exceptions
+- [x] 1.3 Repository/service ports
 - [ ] 2.1 SQLAlchemy user model
 - [ ] 2.2 Bcrypt service
 - [ ] 2.3 Postgres repository
