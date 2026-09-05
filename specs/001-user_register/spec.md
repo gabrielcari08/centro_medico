@@ -1,8 +1,8 @@
-# User Registration — Centro Médico
+# User Registration — Medical Center
 
 ## 1. Objective
 
-Define the process by which users are created and managed within the Centro Médico management system. The system supports three user roles: Administrator, Receptionist, and Professional. The Administrator is pre-provisioned via a `.env` file located at the project root and holds the exclusive permission to create Receptionist and Professional accounts. The objective is to ensure that all user accounts are created with accurate, validated, and unique information, with appropriate error feedback, so that only legitimate users gain access to the system.
+Define the process by which users are created and managed within the Medical Center management system. The system supports three user roles: Administrator, Receptionist, and Professional. The Administrator is pre-provisioned via a `.env` file located at the project root and holds the exclusive permission to create Receptionist and Professional accounts. The objective is to ensure that all user accounts are created with accurate, validated, and unique information, with appropriate error feedback, so that only legitimate users gain access to the system.
 
 ## 2. Use Cases & User Flow
 

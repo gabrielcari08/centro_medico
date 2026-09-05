@@ -77,8 +77,8 @@
 - `app/infrastructure/db/models/user_model.py`
 - `app/infrastructure/db/base.py` (register model)
 **Checkboxes:**
-- [ ] Implement `UserModel(Base)` with columns: `id UUID PK`, `name`, `last_name`, `dni UNIQUE`, `email UNIQUE`, `phone UNIQUE`, `password_hash`, `role`, `cedula UNIQUE NULL`, `is_active DEFAULT TRUE`, `created_at TIMESTAMPTZ`
-- [ ] Add `CHECK` constraints and partial unique index for `cedula`
+- [x] Implement `UserModel(Base)` with columns: `id UUID PK`, `name`, `last_name`, `dni UNIQUE`, `email UNIQUE`, `phone UNIQUE`, `password_hash`, `role`, `cedula UNIQUE NULL`, `is_active DEFAULT TRUE`, `created_at TIMESTAMPTZ`
+- [x] Add `CHECK` constraints and partial unique index for `cedula`
 **Done when:** `bash: docker compose up db -d && python -c "from app.infrastructure.db.base import Base; from app.infrastructure.db.session import engine; Base.metadata.create_all(engine); print('tables created')"` exits 0; `bash: psql $DATABASE_URL -c "\d users"` shows table.
 
 #### Task 2.2: Implement bcrypt password service
@@ -86,8 +86,8 @@
 **Files to create/touch:**
 - `app/infrastructure/services/bcrypt_password_service.py`
 **Checkboxes:**
-- [ ] Implement `BcryptPasswordService(PasswordService)` using `passlib.context.CryptContext(schemes=["bcrypt"])`
-- [ ] Implement `hash` and `verify`
+- [x] Implement `BcryptPasswordService(PasswordService)` using `passlib.context.CryptContext(schemes=["bcrypt"])`
+- [x] Implement `hash` and `verify`
 **Done when:** `bash: pytest tests/infrastructure/test_bcrypt_service.py -v` passes — test hashes `gabi12345` and verifies `verify("gabi12345", hash) is True` and `verify("wrong", hash) is False`.
 
 #### Task 2.3: Implement Postgres user repository
@@ -216,8 +216,8 @@
 - [x] 1.1 User entity & role
 - [x] 1.2 Domain exceptions
 - [x] 1.3 Repository/service ports
-- [ ] 2.1 SQLAlchemy user model
-- [ ] 2.2 Bcrypt service
+- [x] 2.1 SQLAlchemy user model
+- [x] 2.2 Bcrypt service
 - [ ] 2.3 Postgres repository
 - [ ] 2.4 Admin seed
 - [ ] 3.1 DTOs with validation
