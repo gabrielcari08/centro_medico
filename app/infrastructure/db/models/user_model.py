@@ -1,16 +1,14 @@
-import uuid
-from sqlalchemy import Boolean, CheckConstraint, Column, DateTime, String
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Boolean, CheckConstraint, Column, DateTime, Integer, String
 from sqlalchemy.sql import func
 
 from app.infrastructure.db.base import Base
 
 
 class UserModel(Base):
-    # Tabla unica para todos los roles - garantiza unicidad cross-rol
+    # Tabla unica para todos los roles - id numerico autoincremental
     __tablename__ = "users"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), nullable=False)
     last_name = Column(String(100), nullable=False)
     dni = Column(String(8), unique=True, nullable=False)

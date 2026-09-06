@@ -95,8 +95,8 @@
 **Files to create/touch:**
 - `app/infrastructure/repositories/postgres_user_repository.py`
 **Checkboxes:**
-- [ ] Implement all `UserRepository` methods mapping `UserModel <-> User` entity
-- [ ] Handle `IntegrityError` → re-raise as domain exception (defense in depth)
+- [x] Implement all `UserRepository` methods mapping `UserModel <-> User` entity
+- [x] Handle `IntegrityError` → re-raise as domain exception (defense in depth)
 **Done when:** `bash: pytest tests/infrastructure/test_postgres_user_repository.py -v` passes — tests: `save` then `exists_by_email` true, `exists_by_dni` true, duplicate insert raises mapped exception; `docker compose exec db psql -U postgres -d app_db -c "SELECT count(*) FROM users"` works.
 
 #### Task 2.4: Implement admin seed (single admin)
@@ -104,8 +104,8 @@
 **Files to create/touch:**
 - `app/infrastructure/db/seed/admin_seed.py`
 **Checkboxes:**
-- [ ] Implement `ensure_admin_exists(session, settings, user_repo, pwd_service)` — split `NAME` into `name`/`last_name`, synthesize `email=admin@centro.local`, `dni=00000000`, `phone=0000000000`, hash `PASSWORD`, save if no admin exists, idempotent
-- [ ] Wire to FastAPI lifespan in `app/entrypoints/api/v1/main.py` (create stub if not exists)
+- [x] Implement `ensure_admin_exists(session, settings, user_repo, pwd_service)` — split `NAME` into `name`/`last_name`, synthesize `email=admin@centro.local`, `dni=00000000`, `phone=0000000000`, hash `PASSWORD`, save if no admin exists, idempotent
+- [x] Wire to FastAPI lifespan in `app/entrypoints/api/v1/main.py` (create stub if not exists)
 **Done when:** `bash: pytest tests/infrastructure/test_admin_seed.py -v` passes — first call creates admin, second call does not duplicate, `exists_by_role(ADMINISTRATOR)` true; `bash: python -c "from app.infrastructure.db.seed.admin_seed import ensure_admin_exists; print('seed ok')"` passes.
 
 ---
@@ -218,8 +218,8 @@
 - [x] 1.3 Repository/service ports
 - [x] 2.1 SQLAlchemy user model
 - [x] 2.2 Bcrypt service
-- [ ] 2.3 Postgres repository
-- [ ] 2.4 Admin seed
+- [x] 2.3 Postgres repository
+- [x] 2.4 Admin seed
 - [ ] 3.1 DTOs with validation
 - [ ] 4.1 CreateReceptionist use case
 - [ ] 4.2 CreateProfessional use case

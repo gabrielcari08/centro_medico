@@ -65,10 +65,19 @@ services:
     # Vincula la carpeta local ./app con la del contenedor para refrescar el código automáticamente al guardar
     volumes:
       - ./app:/app/app
+      - ./tests:/app/tests
+      - ./specs:/app/specs
+      - ./requirements.txt:/app/requirements.txt
+
+    env_file:
+      - .env
 
     # Pasa la variable de conexión a la base de datos usando el nombre de host interno 'db'
     environment:
       - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-app_db}
+      - NAME=${NAME}
+      - PASSWORD=${PASSWORD}
+      - SECRET_KEY=${SECRET_KEY:-dev-secret-key-change-in-prod}
 
     # Establece dependencia estricta: La API solo arrancará cuando el servicio 'db' esté verificado como 'healthy'
     depends_on:

@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from uuid import UUID, uuid4
 
 
 class UserRole(str, Enum):
@@ -19,7 +18,7 @@ class User:
     phone: str
     password_hash: str
     role: UserRole
-    id: UUID | None = None
+    id: int | None = None
     cedula: str | None = None
     is_active: bool = True
     created_at: datetime = field(default_factory=datetime.utcnow)
@@ -53,7 +52,3 @@ class User:
             raise ValueError("Campos faltantes")
         if self.role != UserRole.PROFESSIONAL and self.cedula is not None:
             raise ValueError("cedula only allowed for professional")
-
-        # Generar id si no se proporciona
-        if self.id is None:
-            self.id = uuid4()
