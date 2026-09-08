@@ -154,9 +154,9 @@
 - `app/entrypoints/api/v1/main.py`
 - `app/entrypoints/api/v1/dependencies.py`
 **Checkboxes:**
-- [ ] Implement `main.py` with `FastAPI(title="Centro Médico")`, lifespan calling `ensure_admin_exists`, include router
-- [ ] Implement `get_db_session`, `get_user_repository`, `get_password_service`, `get_current_admin` (verify JWT, check `role==ADMINISTRATOR` → 401/403), `get_create_receptionist_use_case`, `get_create_professional_use_case`
-- [ ] Implement `POST /api/v1/auth/login` logic (compare against admin row or `.env` fallback, return JWT via `python-jose`)
+- [x] Implement `main.py` with `FastAPI(title="Centro Médico")`, lifespan calling `ensure_admin_exists`, include router
+- [x] Implement `get_db_session`, `get_user_repository`, `get_password_service`, `get_current_admin` (verify JWT, check `role==ADMINISTRATOR` → 401/403), `get_create_receptionist_use_case`, `get_create_professional_use_case`
+- [x] Implement `POST /api/v1/auth/login` logic (compare against admin row or `.env` fallback, return JWT via `python-jose`)
 **Done when:** `bash: pytest tests/entrypoints/test_auth.py -v` passes — login with `NAME=Gabriel Cari` / `PASSWORD=gabi12345` → 200 + token; wrong password → 401; `get_current_admin` with receptionist token → 403; `bash: curl -X POST http://localhost:8000/api/v1/auth/login -H "Content-Type: application/json" -d '{"name":"Gabriel Cari","password":"gabi12345"}'` returns `access_token` when stack running.
 
 #### Task 5.2: Create user router with two endpoints
@@ -164,9 +164,9 @@
 **Files to create/touch:**
 - `app/entrypoints/api/v1/routes/user_router.py`
 **Checkboxes:**
-- [ ] Implement `POST /api/v1/users/receptionists` → 201 `UserResponse`, map `DuplicateEmailException`→409 `email ya registrado`, `DuplicateUserException`→409 `Usuario ya registrado`, `ValidationError` missing→400 `Campos faltantes`, format errors→422 with spec literals
-- [ ] Implement `POST /api/v1/users/professionals` similarly with cedula
-- [ ] Require `Depends(get_current_admin)` on both
+- [x] Implement `POST /api/v1/users/receptionists` → 201 `UserResponse`, map `DuplicateEmailException`→409 `email ya registrado`, `DuplicateUserException`→409 `Usuario ya registrado`, `ValidationError` missing→400 `Campos faltantes`, format errors→422 with spec literals
+- [x] Implement `POST /api/v1/users/professionals` similarly with cedula
+- [x] Require `Depends(get_current_admin)` on both
 **Done when:** `bash: pytest tests/entrypoints/test_user_router.py -v` passes — 12 cases: valid receptionist/professional →201; duplicate email→409 `email ya registrado`; duplicate dni/phone/cedula→409 `Usuario ya registrado`; missing field→400 `Campos faltantes`; invalid email→422 `email invalido`; invalid dni/phone→422 `Formato inválido, debe tener 8/10 caracteres`; invalid cedula→422 `Formato inválido, debe tener 7 u 8 caracteres`; password short→422 `La contraseña debe tener al menos 8 caracteres`; non-admin→403.
 
 ---
@@ -223,8 +223,8 @@
 - [x] 3.1 DTOs with validation
 - [x] 4.1 CreateReceptionist use case
 - [x] 4.2 CreateProfessional use case
-- [ ] 5.1 FastAPI app & auth deps
-- [ ] 5.2 User router endpoints
+- [x] 5.1 FastAPI app & auth deps
+- [x] 5.2 User router endpoints
 - [ ] 6.1 Docker smoke
 - [ ] 6.2 Linter/type/coverage
 - [ ] 6.3 E2E verification
