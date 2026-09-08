@@ -117,10 +117,10 @@
 **Files to create/touch:**
 - `app/application/dtos/user_dtos.py`
 **Checkboxes:**
-- [ ] Implement `CreateReceptionistRequest` with `name`, `last_name` (strip, min 1), `dni` pattern `^\d{8}$` error `Formato inválido, debe tener 8 caracteres`, `email` EmailStr custom message `email invalido`, `phone` pattern `^\d{10}$`, `password` min 8 error `La contraseña debe tener al menos 8 caracteres`
-- [ ] Implement `CreateProfessionalRequest` extending above + `cedula` pattern `^[A-Za-z0-9]{7,8}$` error `Formato inválido, debe tener 7 u 8 caracteres`
-- [ ] Implement `UserResponse` with `from_entity` mapper
-- [ ] Ensure missing/empty field triggers `Campos faltantes` via validator
+- [x] Implement `CreateReceptionistRequest` with `name`, `last_name` (strip, min 1), `dni` pattern `^\d{8}$` error `Formato inválido, debe tener 8 caracteres`, `email` EmailStr custom message `email invalido`, `phone` pattern `^\d{10}$`, `password` min 8 error `La contraseña debe tener al menos 8 caracteres`
+- [x] Implement `CreateProfessionalRequest` extending above + `cedula` pattern `^[A-Za-z0-9]{7,8}$` error `Formato inválido, debe tener 7 u 8 caracteres`
+- [x] Implement `UserResponse` with `from_entity` mapper
+- [x] Ensure missing/empty field triggers `Campos faltantes` via validator
 **Done when:** `bash: pytest tests/application/test_user_dtos.py -v` passes — 10+ cases: missing field → `Campos faltantes`, email without `@` → `email invalido`, dni `123` → `Formato inválido, debe tener 8 caracteres`, phone `123` → `Formato inválido, debe tener 10 caracteres`, cedula `abc` → `Formato inválido, debe tener 7 u 8 caracteres`, password `short` → `La contraseña debe tener al menos 8 caracteres`, valid payload passes.
 
 ---
@@ -132,8 +132,8 @@
 **Files to create/touch:**
 - `app/application/use_cases/user/create_receptionist.py`
 **Checkboxes:**
-- [ ] Inject `UserRepository` + `PasswordService`
-- [ ] Implement `execute(dto)` — checks in order: `exists_by_email` → `DuplicateEmailException("email ya registrado")`, `exists_by_dni`/`exists_by_phone` → `DuplicateUserException("Usuario ya registrado")`, hash password, create `User(role=RECEPTIONIST, is_active=True)`, save
+- [x] Inject `UserRepository` + `PasswordService`
+- [x] Implement `execute(dto)` — checks in order: `exists_by_email` → `DuplicateEmailException("email ya registrado")`, `exists_by_dni`/`exists_by_phone` → `DuplicateUserException("Usuario ya registrado")`, hash password, create `User(role=RECEPTIONIST, is_active=True)`, save
 **Done when:** `bash: pytest tests/application/test_create_receptionist.py -v` passes — mocks: success returns active user with hashed password; duplicate email/dni/phone raise correct exceptions; `pwd_service.hash` called once.
 
 #### Task 4.2: Create CreateProfessional use case
@@ -141,7 +141,7 @@
 **Files to create/touch:**
 - `app/application/use_cases/user/create_professional.py`
 **Checkboxes:**
-- [ ] Same injection, check `exists_by_email` first, then `dni`/`phone`/`cedula` → `Usuario ya registrado`, hash, create `User(role=PROFESSIONAL, cedula=dto.cedula)`
+- [x] Same injection, check `exists_by_email` first, then `dni`/`phone`/`cedula` → `Usuario ya registrado`, hash, create `User(role=PROFESSIONAL, cedula=dto.cedula)`
 **Done when:** `bash: pytest tests/application/test_create_professional.py -v` passes — success with cedula `ABC1234` (7) and `12345678` (8); duplicate cedula raises; missing cedula fails at DTO level (no use case test needed).
 
 ---
@@ -220,9 +220,9 @@
 - [x] 2.2 Bcrypt service
 - [x] 2.3 Postgres repository
 - [x] 2.4 Admin seed
-- [ ] 3.1 DTOs with validation
-- [ ] 4.1 CreateReceptionist use case
-- [ ] 4.2 CreateProfessional use case
+- [x] 3.1 DTOs with validation
+- [x] 4.1 CreateReceptionist use case
+- [x] 4.2 CreateProfessional use case
 - [ ] 5.1 FastAPI app & auth deps
 - [ ] 5.2 User router endpoints
 - [ ] 6.1 Docker smoke
