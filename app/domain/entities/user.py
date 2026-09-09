@@ -19,7 +19,6 @@ class User:
     password_hash: str
     role: UserRole
     id: int | None = None
-    cedula: str | None = None
     is_active: bool = True
     created_at: datetime = field(default_factory=datetime.utcnow)
 
@@ -30,8 +29,6 @@ class User:
         self.email = self.email.strip()
         self.dni = self.dni.strip()
         self.phone = self.phone.strip()
-        if self.cedula is not None:
-            self.cedula = self.cedula.strip()
 
         # Campos obligatorios no vacios
         if not self.name:
@@ -46,9 +43,3 @@ class User:
             raise ValueError("Campos faltantes")
         if not self.password_hash:
             raise ValueError("Campos faltantes")
-
-        # Invariante de rol y cedula
-        if self.role == UserRole.PROFESSIONAL and self.cedula is None:
-            raise ValueError("Campos faltantes")
-        if self.role != UserRole.PROFESSIONAL and self.cedula is not None:
-            raise ValueError("cedula only allowed for professional")
