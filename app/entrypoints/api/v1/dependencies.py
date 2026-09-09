@@ -10,6 +10,7 @@ from app.application.use_cases.user.create_receptionist import CreateReceptionis
 from app.domain.entities.user import UserRole
 from app.infrastructure.config.settings import Settings
 from app.infrastructure.db.session import SessionLocal
+from app.infrastructure.repositories.postgres_professional_repository import PostgresProfessionalRepository
 from app.infrastructure.repositories.postgres_user_repository import PostgresUserRepository
 from app.infrastructure.services.bcrypt_password_service import BcryptPasswordService
 
@@ -30,6 +31,10 @@ def get_db():
 
 def get_user_repository(db: Session = Depends(get_db)):
     return PostgresUserRepository(db)
+
+
+def get_professional_repository(db: Session = Depends(get_db)):
+    return PostgresProfessionalRepository(db)
 
 
 def get_password_service():
@@ -77,6 +82,7 @@ def get_create_receptionist_use_case(
 
 def get_create_professional_use_case(
     repo=Depends(get_user_repository),
+    prof_repo=Depends(get_professional_repository),
     pwd=Depends(get_password_service),
 ):
-    return CreateProfessionalUseCase(repo, pwd)
+    return CreateProfessionalUseCase(repo, prof_repo, pwd)

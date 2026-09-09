@@ -73,7 +73,7 @@ class CreateProfessionalRequest(CreateReceptionistRequest):
             raise ValueError("Formato inválido, debe tener 7 u 8 caracteres")
         return v.strip()
 
-# Define which fields must be returned from a user. 
+# Define which fields must be returned from a user.
 class UserResponse(BaseModel):
     id: int
     name: str
@@ -82,7 +82,6 @@ class UserResponse(BaseModel):
     email: str
     phone: str
     role: UserRole
-    cedula: str | None = None
     is_active: bool
     created_at: datetime
 
@@ -96,7 +95,16 @@ class UserResponse(BaseModel):
             email=user.email,
             phone=user.phone,
             role=user.role,
-            cedula=user.cedula,
             is_active=user.is_active,
             created_at=user.created_at,
         )
+
+
+class ProfessionalResponse(BaseModel):
+    id: int
+    user_id: int
+    cedula: str
+
+    @classmethod
+    def from_entity(cls, professional) -> "ProfessionalResponse":
+        return cls(id=professional.id, user_id=professional.user_id, cedula=professional.cedula)

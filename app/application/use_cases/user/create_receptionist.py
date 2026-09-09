@@ -28,7 +28,6 @@ class CreateReceptionistUseCase:
             phone=dto.phone,
             password_hash=hashed,
             role=UserRole.RECEPTIONIST,
-            cedula=None,
             is_active=True,
         )
         return self.user_repo.save(user)
