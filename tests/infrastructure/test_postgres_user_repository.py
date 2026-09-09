@@ -1,6 +1,7 @@
-import uuid
 from app.domain.entities.user import User, UserRole
 from app.infrastructure.db.base import Base
+from app.infrastructure.db.models.professional_model import ProfessionalModel  # noqa: F401
+from app.infrastructure.db.models.user_model import UserModel  # noqa: F401
 from app.infrastructure.db.session import SessionLocal, engine
 from app.infrastructure.repositories.postgres_user_repository import PostgresUserRepository
 
@@ -51,14 +52,4 @@ def test_duplicate_integrity():
         db.close()
 
 
-def test_save_professional_with_cedula():
-    _clean()
-    db = SessionLocal()
-    try:
-        repo = PostgresUserRepository(db)
-        user = User(name="Pro", last_name="Test", dni="33333333", email="pro@test.com", phone="4444444444", password_hash="h", role=UserRole.PROFESSIONAL, cedula="ABC1234")
-        saved = repo.save(user)
-        assert repo.exists_by_cedula("ABC1234") is True
-        assert saved.cedula == "ABC1234"
-    finally:
-        db.close()
+

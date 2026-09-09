@@ -1,6 +1,8 @@
 from app.domain.entities.user import UserRole
 from app.infrastructure.config.settings import Settings
 from app.infrastructure.db.base import Base
+from app.infrastructure.db.models.professional_model import ProfessionalModel  # noqa: F401
+from app.infrastructure.db.models.user_model import UserModel  # noqa: F401
 from app.infrastructure.db.session import SessionLocal, engine
 from app.infrastructure.db.seed.admin_seed import ensure_admin_exists
 from app.infrastructure.repositories.postgres_user_repository import PostgresUserRepository
