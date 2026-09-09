@@ -18,10 +18,6 @@ class UserRepository(ABC):
         pass
 
     @abstractmethod
-    def get_by_cedula(self, cedula: str) -> Optional[User]:
-        pass
-
-    @abstractmethod
     def get_by_id(self, user_id: int) -> Optional[User]:
         pass
 
@@ -35,10 +31,6 @@ class UserRepository(ABC):
 
     @abstractmethod
     def exists_by_phone(self, phone: str) -> bool:
-        pass
-
-    @abstractmethod
-    def exists_by_cedula(self, cedula: str) -> bool:
         pass
 
     @abstractmethod

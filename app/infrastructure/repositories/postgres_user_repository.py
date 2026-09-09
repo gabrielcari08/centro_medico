@@ -18,14 +18,12 @@ def _to_entity(model: UserModel) -> User:
         phone=model.phone,
         password_hash=model.password_hash,
         role=UserRole(model.role),
-        cedula=model.cedula,
         is_active=model.is_active,
         created_at=model.created_at,
     )
 
 
 def _to_model(entity: User) -> UserModel:
-    # Si id es None, deja que la BD lo genere autoincrementalmente
     data = dict(
         name=entity.name,
         last_name=entity.last_name,
@@ -34,7 +32,6 @@ def _to_model(entity: User) -> UserModel:
         phone=entity.phone,
         password_hash=entity.password_hash,
         role=entity.role.value,
-        cedula=entity.cedula,
         is_active=entity.is_active,
         created_at=entity.created_at,
     )
@@ -59,10 +56,6 @@ class PostgresUserRepository(UserRepository):
         model = self.db.query(UserModel).filter(UserModel.phone == phone).first()
         return _to_entity(model) if model else None
 
-    def get_by_cedula(self, cedula: str):
-        model = self.db.query(UserModel).filter(UserModel.cedula == cedula).first()
-        return _to_entity(model) if model else None
-
     def get_by_id(self, user_id: int):
         model = self.db.query(UserModel).filter(UserModel.id == user_id).first()
         return _to_entity(model) if model else None
@@ -75,9 +68,6 @@ class PostgresUserRepository(UserRepository):
 
     def exists_by_phone(self, phone: str) -> bool:
         return self.db.query(UserModel).filter(UserModel.phone == phone).first() is not None
-
-    def exists_by_cedula(self, cedula: str) -> bool:
-        return self.db.query(UserModel).filter(UserModel.cedula == cedula).first() is not None
 
     def exists_by_role(self, role: UserRole) -> bool:
         return self.db.query(UserModel).filter(UserModel.role == role.value).first() is not None
