@@ -108,3 +108,22 @@ class ProfessionalResponse(BaseModel):
     @classmethod
     def from_entity(cls, professional) -> "ProfessionalResponse":
         return cls(id=professional.id, user_id=professional.user_id, cedula=professional.cedula)
+
+
+class ProfessionalUserResponse(UserResponse):
+    cedula: str
+
+    @classmethod
+    def from_entities(cls, user: User, cedula: str) -> "ProfessionalUserResponse":
+        return cls(
+            id=user.id,
+            name=user.name,
+            last_name=user.last_name,
+            dni=user.dni,
+            email=user.email,
+            phone=user.phone,
+            role=user.role,
+            is_active=user.is_active,
+            created_at=user.created_at,
+            cedula=cedula,
+        )

@@ -2,6 +2,8 @@ from fastapi.testclient import TestClient
 
 from app.entrypoints.api.v1.main import app
 from app.infrastructure.db.base import Base
+from app.infrastructure.db.models.professional_model import ProfessionalModel  # noqa: F401
+from app.infrastructure.db.models.user_model import UserModel  # noqa: F401
 from app.infrastructure.db.session import SessionLocal, engine
 from app.infrastructure.repositories.postgres_user_repository import PostgresUserRepository
 from app.infrastructure.services.bcrypt_password_service import BcryptPasswordService
