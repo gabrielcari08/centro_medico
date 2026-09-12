@@ -22,15 +22,15 @@ class UserRepository(ABC):
         pass
 
     @abstractmethod
-    def exists_by_email(self, email: str) -> bool:
+    def exists_by_email(self, email: str, exclude_id: int | None = None) -> bool:
         pass
 
     @abstractmethod
-    def exists_by_dni(self, dni: str) -> bool:
+    def exists_by_dni(self, dni: str, exclude_id: int | None = None) -> bool:
         pass
 
     @abstractmethod
-    def exists_by_phone(self, phone: str) -> bool:
+    def exists_by_phone(self, phone: str, exclude_id: int | None = None) -> bool:
         pass
 
     @abstractmethod
@@ -39,4 +39,8 @@ class UserRepository(ABC):
 
     @abstractmethod
     def save(self, user: User) -> User:
+        pass
+
+    @abstractmethod
+    def delete(self, user: User) -> None:
         pass

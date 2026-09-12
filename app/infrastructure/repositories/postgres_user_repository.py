@@ -20,6 +20,7 @@ def _to_entity(model: UserModel) -> User:
         role=UserRole(model.role),
         is_active=model.is_active,
         created_at=model.created_at,
+        updated_at=model.updated_at,
     )
 
 
@@ -34,6 +35,7 @@ def _to_model(entity: User) -> UserModel:
         role=entity.role.value,
         is_active=entity.is_active,
         created_at=entity.created_at,
+        updated_at=entity.updated_at,
     )
     if entity.id is not None:
         data["id"] = entity.id

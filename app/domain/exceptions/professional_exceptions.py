@@ -1,5 +1,15 @@
 class ProfessionalNotFoundException(Exception):
-    def __init__(self, message: str = "Professional not found"):
+    def __init__(self, message: str = "Professional Not Found"):
+        super().__init__(message)
+
+
+class AlreadyActiveException(Exception):
+    def __init__(self, message: str = "Profesional ya activado"):
+        super().__init__(message)
+
+
+class AlreadyInactiveException(Exception):
+    def __init__(self, message: str = "Profesional ya desactivado"):
         super().__init__(message)
 
 

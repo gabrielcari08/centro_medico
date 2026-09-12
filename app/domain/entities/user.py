@@ -21,6 +21,7 @@ class User:
     id: int | None = None
     is_active: bool = True
     created_at: datetime = field(default_factory=datetime.utcnow)
+    updated_at: datetime = field(default_factory=datetime.utcnow)
 
     def __post_init__(self):
         # Normalizacion basica de strings
