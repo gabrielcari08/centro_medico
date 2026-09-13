@@ -1,4 +1,4 @@
-from app.application.dtos.user_dtos import CreateProfessionalRequest
+from app.application.dtos.professional_dtos import CreateProfessionalRequest
 from app.domain.entities.professional import Professional
 from app.domain.entities.user import User, UserRole
 from app.domain.exceptions.user_exceptions import DuplicateEmailException, DuplicateUserException

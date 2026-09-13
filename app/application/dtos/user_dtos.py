@@ -58,21 +58,6 @@ class CreateReceptionistRequest(BaseModel):
             raise ValueError("La contraseña debe tener al menos 8 caracteres")
         return v
 
-# Define which fields the user must submit to register a professional.
-# Extends from CreateReceptionistRequest because it has the same fields + cedula.
-class CreateProfessionalRequest(CreateReceptionistRequest):
-    cedula: str
-
-    # Validations of the field.
-    @field_validator("cedula")
-    @classmethod
-    def validate_cedula(cls, v: str):
-        if not v or not v.strip():
-            raise ValueError("Campos faltantes")
-        if not re.fullmatch(r"^[A-Za-z0-9]{7,8}$", v.strip()):
-            raise ValueError("Formato inválido, debe tener 7 u 8 caracteres")
-        return v.strip()
-
 # Define which fields must be returned from a user.
 class UserResponse(BaseModel):
     id: int
@@ -97,33 +82,4 @@ class UserResponse(BaseModel):
             role=user.role,
             is_active=user.is_active,
             created_at=user.created_at,
-        )
-
-
-class ProfessionalResponse(BaseModel):
-    id: int
-    user_id: int
-    cedula: str
-
-    @classmethod
-    def from_entity(cls, professional) -> "ProfessionalResponse":
-        return cls(id=professional.id, user_id=professional.user_id, cedula=professional.cedula)
-
-
-class ProfessionalUserResponse(UserResponse):
-    cedula: str
-
-    @classmethod
-    def from_entities(cls, user: User, cedula: str) -> "ProfessionalUserResponse":
-        return cls(
-            id=user.id,
-            name=user.name,
-            last_name=user.last_name,
-            dni=user.dni,
-            email=user.email,
-            phone=user.phone,
-            role=user.role,
-            is_active=user.is_active,
-            created_at=user.created_at,
-            cedula=cedula,
         )

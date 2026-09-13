@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from app.application.dtos.user_dtos import CreateProfessionalRequest, CreateReceptionistRequest, ProfessionalUserResponse, UserResponse
+from app.application.dtos.professional_dtos import CreateProfessionalRequest, ProfessionalUserResponse
+from app.application.dtos.user_dtos import CreateReceptionistRequest, UserResponse
 from app.domain.exceptions.user_exceptions import DuplicateEmailException, DuplicateUserException
 from app.entrypoints.api.v1.dependencies import get_create_professional_use_case, get_create_receptionist_use_case, get_current_admin, get_professional_repository
 
