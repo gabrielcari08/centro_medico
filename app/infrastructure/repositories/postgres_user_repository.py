@@ -8,7 +8,6 @@ from app.infrastructure.db.models.user_model import UserModel
 
 
 def _to_entity(model: UserModel) -> User:
-    # Mapeo ORM -> entidad de dominio
     return User(
         id=model.id,
         name=model.name,
@@ -62,20 +61,35 @@ class PostgresUserRepository(UserRepository):
         model = self.db.query(UserModel).filter(UserModel.id == user_id).first()
         return _to_entity(model) if model else None
 
-    def exists_by_email(self, email: str) -> bool:
-        return self.db.query(UserModel).filter(UserModel.email == email.lower()).first() is not None
+    # Implements exclude_id
+    def exists_by_email(self, email: str, exclude_id: int | None = None) -> bool:
+        query = self.db.query(UserModel).filter(UserModel.email == email.lower())
+        if exclude_id is not None:
+            query = query.filter(UserModel.id != exclude_id)
+        return query.first() is not None
 
-    def exists_by_dni(self, dni: str) -> bool:
-        return self.db.query(UserModel).filter(UserModel.dni == dni).first() is not None
+    def exists_by_dni(self, dni: str, exclude_id: int | None = None) -> bool:
+        query = self.db.query(UserModel).filter(UserModel.dni == dni)
+        if exclude_id is not None:
+            query = query.filter(UserModel.id != exclude_id)
+        return query.first() is not None
 
-    def exists_by_phone(self, phone: str) -> bool:
-        return self.db.query(UserModel).filter(UserModel.phone == phone).first() is not None
+    def exists_by_phone(self, phone: str, exclude_id: int | None = None) -> bool:
+        query = self.db.query(UserModel).filter(UserModel.phone == phone)
+        if exclude_id is not None:
+            query = query.filter(UserModel.id != exclude_id)
+        return query.first() is not None
 
     def exists_by_role(self, role: UserRole) -> bool:
         return self.db.query(UserModel).filter(UserModel.role == role.value).first() is not None
 
+    def exists_by_cedula(self, cedula: str, exclude_id: int | None = None) -> bool:
+        query = self.db.query(UserModel).filter(UserModel.cedula == cedula)
+        if exclude_id is not None:
+            query = query.filter(UserModel.id != exclude_id)
+        return query.first() is not None
+
     def save(self, user: User) -> User:
-        # Defensa en profundidad: captura violaciones de unicidad a nivel DB
         try:
             model = _to_model(user)
             self.db.add(model)
@@ -88,3 +102,12 @@ class PostgresUserRepository(UserRepository):
             if "email" in msg.lower():
                 raise DuplicateEmailException("email ya registrado") from e
             raise DuplicateUserException("Usuario ya registrado") from e
+
+    # Implements delete method 
+    def delete(self, user: User) -> None:
+        if user.id is None:
+            return
+        model = self.db.query(UserModel).filter(UserModel.id == user.id).first()
+        if model:
+            self.db.delete(model)
+            self.db.commit()
