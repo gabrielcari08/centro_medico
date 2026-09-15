@@ -79,8 +79,8 @@
 
 - `app/entrypoints/api/v1/routes/auth_router.py`
   **Checkboxes:**
-- [ ] After password verify, check `if not user.is_active: raise HTTPException(401, "Unauthorized")` (or 403) for `users` with `is_active=false`
-- [ ] Ensure admin (`role=administrator`) is_active check does not block admin (admin always active)
+- [x] After password verify, check `if not user.is_active: raise HTTPException(401, "Unauthorized")` (or 403) for `users` with `is_active=false`
+- [x] Ensure admin (`role=administrator`) is_active check does not block admin (admin always active)
       **Done when:** `docker compose exec api pytest tests/entrypoints/test_auth.py::test_login_inactive_blocked -v` passes — create professional, deactivate via use case, then `POST /auth/login` with that professional's credentials → 401; admin login still 200.
 
 ---
@@ -223,7 +223,7 @@
 - [x] 1.3 Domain exceptions for activate idempotency
 - [x] 2.1 PostgresProfessionalRepository list/search/delete
 - [x] 2.2 PostgresUserRepository exclude_id + delete + updated_at
-- [ ] 2.3 Login block for inactive
+- [x] 2.3 Login block for inactive
 - [ ] 3.1 ListProfessionals + ListDeactivated
 - [ ] 3.2 GetProfessionalById
 - [ ] 3.3 UpdateProfessional

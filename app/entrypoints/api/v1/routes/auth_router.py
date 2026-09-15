@@ -21,23 +21,32 @@ class LoginResponse(BaseModel):
 
 @router.post("/login", response_model=LoginResponse)
 def login(payload: LoginRequest, repo=Depends(get_user_repository), pwd=Depends(get_password_service)):
-    # Autenticacion solo para administrador pre-provisionado
     settings = Settings()
+    login_name = payload.name.strip()
     # Buscar admin por email sintetico
     admin = repo.get_by_email("admin@centro.local")
-    if not admin or admin.role != UserRole.ADMINISTRATOR:
+
+    is_admin_login = False
+    if admin and admin.role == UserRole.ADMINISTRATOR:
+        if login_name == settings.NAME or login_name.lower() == admin.email.lower():
+            is_admin_login = True
+
+    if is_admin_login:
+        if not admin.is_active:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized")
+        if not pwd.verify(payload.password, admin.password_hash):
+            if payload.password != settings.PASSWORD:
+                raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized")
+        token = create_access_token({"sub": admin.email, "role": admin.role.value})
+        return LoginResponse(access_token=token)
+
+    # Login general para cualquier usuario (profesionales, recepcionistas) por email
+    user = repo.get_by_email(login_name.lower())
+    if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized")
-
-    # Verificar que el nombre coincida con .env NAME y password con hash
-    if payload.name.strip() != settings.NAME:
-        # tambien aceptar email del admin como alias
-        if payload.name.strip().lower() != admin.email.lower():
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized")
-
-    if not pwd.verify(payload.password, admin.password_hash):
-        # Fallback directo a Settings.PASSWORD en caso de desincronizacion de hash
-        if payload.password != settings.PASSWORD:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized")
-
-    token = create_access_token({"sub": admin.email, "role": admin.role.value})
+    if not pwd.verify(payload.password, user.password_hash):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized")
+    if not user.is_active:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized")
+    token = create_access_token({"sub": user.email, "role": user.role.value})
     return LoginResponse(access_token=token)

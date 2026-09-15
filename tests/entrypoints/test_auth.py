@@ -41,6 +41,29 @@ def test_login_wrong_password():
     assert r.status_code == 401
 
 
+def test_login_inactive_blocked():
+    _clean()
+    db = SessionLocal()
+    try:
+        repo = PostgresUserRepository(db)
+        pwd = BcryptPasswordService()
+        user = User(name="Pro", last_name="Test", dni="33333333", email="pro@test.com", phone="3333333333", password_hash=pwd.hash("password123"), role=UserRole.PROFESSIONAL)
+        saved = repo.save(user)
+        # active login works
+        r_ok = client.post("/api/v1/auth/login", json={"name": "pro@test.com", "password": "password123"})
+        assert r_ok.status_code == 200
+        # deactivate
+        saved.is_active = False
+        repo.save(saved)
+        r_blocked = client.post("/api/v1/auth/login", json={"name": "pro@test.com", "password": "password123"})
+        assert r_blocked.status_code == 401
+        # admin still works
+        r_admin = client.post("/api/v1/auth/login", json={"name": "Gabriel Cari", "password": "gabi12345"})
+        assert r_admin.status_code == 200
+    finally:
+        db.close()
+
+
 def test_get_current_admin_forbidden_for_receptionist():
     _clean()
     # crear receptionist y generar token
