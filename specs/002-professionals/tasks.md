@@ -54,10 +54,10 @@
 
 - `app/infrastructure/repositories/postgres_professional_repository.py`
   **Checkboxes:**
-- [ ] Implement `list_active(search)`: `JOIN users ON professionals.user_id=users.id WHERE users.role='professional' AND is_active=true`, apply `ILIKE` with `LOWER()` on `users.name`, `last_name`, `name||' '||last_name`, `professionals.cedula` if search provided, `ORDER BY LOWER(users.name) ASC, LOWER(users.last_name) ASC`
-- [ ] Implement `list_deactivated()`: same JOIN with `is_active=false`, same ordering
-- [ ] Implement `get_by_id`, `get_by_user_id`, `delete`, `exists_by_cedula` with `exclude_user_id` support
-- [ ] Handle `IntegrityError` → `DuplicateUserException`
+- [x] Implement `list_active(search)`: `JOIN users ON professionals.user_id=users.id WHERE users.role='professional' AND is_active=true`, apply `ILIKE` with `LOWER()` on `users.name`, `last_name`, `name||' '||last_name`, `professionals.cedula` if search provided, `ORDER BY LOWER(users.name) ASC, LOWER(users.last_name) ASC`
+- [x] Implement `list_deactivated()`: same JOIN with `is_active=false`, same ordering
+- [x] Implement `get_by_id`, `get_by_user_id`, `delete`, `exists_by_cedula` with `exclude_user_id` support
+- [x] Handle `IntegrityError` → `DuplicateUserException`
       **Done when:** `docker compose exec api pytest tests/infrastructure/test_postgres_professional_repository.py -v` passes — cases: save + `exists_by_cedula` true, `list_active` returns only active ordered A-Z, `list_active(search="ana")` case-insensitive returns multiple, `list_deactivated` returns only inactive, `get_by_id` not found → None, `delete` removes row.
 
 #### Task 2.2: Extend PostgresUserRepository with exclude_id and delete + updated_at handling
@@ -221,7 +221,7 @@
 - [x] 1.1 DTOs: UpdateProfessionalRequest + ProfessionalDetailResponse
 - [x] 1.2 Repository ports with exclude_id and delete
 - [x] 1.3 Domain exceptions for activate idempotency
-- [ ] 2.1 PostgresProfessionalRepository list/search/delete
+- [x] 2.1 PostgresProfessionalRepository list/search/delete
 - [ ] 2.2 PostgresUserRepository exclude_id + delete + updated_at
 - [ ] 2.3 Login block for inactive
 - [ ] 3.1 ListProfessionals + ListDeactivated

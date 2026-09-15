@@ -83,12 +83,6 @@ class PostgresUserRepository(UserRepository):
     def exists_by_role(self, role: UserRole) -> bool:
         return self.db.query(UserModel).filter(UserModel.role == role.value).first() is not None
 
-    def exists_by_cedula(self, cedula: str, exclude_id: int | None = None) -> bool:
-        query = self.db.query(UserModel).filter(UserModel.cedula == cedula)
-        if exclude_id is not None:
-            query = query.filter(UserModel.id != exclude_id)
-        return query.first() is not None
-
     def save(self, user: User) -> User:
         try:
             model = _to_model(user)
