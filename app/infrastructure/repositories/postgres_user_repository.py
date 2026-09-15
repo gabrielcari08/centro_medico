@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -85,6 +87,21 @@ class PostgresUserRepository(UserRepository):
 
     def save(self, user: User) -> User:
         try:
+            if user.id is not None:
+                existing = self.db.query(UserModel).filter(UserModel.id == user.id).first()
+                if existing is not None:
+                    existing.name = user.name
+                    existing.last_name = user.last_name
+                    existing.dni = user.dni
+                    existing.email = user.email.lower()
+                    existing.phone = user.phone
+                    existing.password_hash = user.password_hash
+                    existing.role = user.role.value
+                    existing.is_active = user.is_active
+                    existing.updated_at = datetime.now(timezone.utc)
+                    self.db.commit()
+                    self.db.refresh(existing)
+                    return _to_entity(existing)
             model = _to_model(user)
             self.db.add(model)
             self.db.commit()
@@ -97,10 +114,13 @@ class PostgresUserRepository(UserRepository):
                 raise DuplicateEmailException("email ya registrado") from e
             raise DuplicateUserException("Usuario ya registrado") from e
 
-    # Implements delete method 
+    # Implements delete method
     def delete(self, user: User) -> None:
         if user.id is None:
             return
+        from app.infrastructure.db.models.professional_model import ProfessionalModel
+
+        self.db.query(ProfessionalModel).filter(ProfessionalModel.user_id == user.id).delete(synchronize_session=False)
         model = self.db.query(UserModel).filter(UserModel.id == user.id).first()
         if model:
             self.db.delete(model)

@@ -67,9 +67,9 @@
 
 - `app/infrastructure/repositories/postgres_user_repository.py`
   **Checkboxes:**
-- [ ] Update `exists_by_email/dni/phone` to accept `exclude_id: int|None` → `WHERE field=:value AND id != :exclude_id` when provided
-- [ ] Implement `delete(user)` → `DELETE FROM users WHERE id=:id` (cascade deletes professional via FK)
-- [ ] Ensure `save` handles update via `merge` and touches `updated_at` (SQLAlchemy `onupdate=func.now()`)
+- [x] Update `exists_by_email/dni/phone` to accept `exclude_id: int|None` → `WHERE field=:value AND id != :exclude_id` when provided
+- [x] Implement `delete(user)` → `DELETE FROM users WHERE id=:id` (cascade deletes professional via FK)
+- [x] Ensure `save` handles update via `merge` and touches `updated_at` (SQLAlchemy `onupdate=func.now()`)
       **Done when:** `docker compose exec api pytest tests/infrastructure/test_postgres_user_repository.py -v` passes — new cases: `exists_by_email("a@test.com", exclude_id=same_id)` → False, `exists_by_email` with other id → True, `delete` removes user and cascaded professional.
 
 #### Task 2.3: Enforce login block for inactive professionals
@@ -222,7 +222,7 @@
 - [x] 1.2 Repository ports with exclude_id and delete
 - [x] 1.3 Domain exceptions for activate idempotency
 - [x] 2.1 PostgresProfessionalRepository list/search/delete
-- [ ] 2.2 PostgresUserRepository exclude_id + delete + updated_at
+- [x] 2.2 PostgresUserRepository exclude_id + delete + updated_at
 - [ ] 2.3 Login block for inactive
 - [ ] 3.1 ListProfessionals + ListDeactivated
 - [ ] 3.2 GetProfessionalById
