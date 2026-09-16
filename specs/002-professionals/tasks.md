@@ -106,7 +106,7 @@
 
 - `app/application/use_cases/professional/get_professional_by_id.py`
   **Checkboxes:**
-- [ ] Fetch `professional` by id → `ProfessionalNotFoundException` if None, fetch linked `user` → if not found or (public mode) `is_active=false` → 404, map to `ProfessionalDetailResponse`
+- [x] Fetch `professional` by id → `ProfessionalNotFoundException` if None, fetch linked `user` → if not found or (public mode) `is_active=false` → 404, map to `ProfessionalDetailResponse`
       **Done when:** `docker compose exec api pytest tests/application/test_get_professional_by_id.py -v` passes — found active → response, inactive/public → 404, non-existent → 404.
 
 #### Task 3.3: Implement UpdateProfessional
@@ -116,9 +116,9 @@
 
 - `app/application/use_cases/professional/update_professional.py`
   **Checkboxes:**
-- [ ] Verify admin role, fetch professional+user or raise `ProfessionalNotFound`
-- [ ] Validate uniqueness excluding self: `exists_by_email/dni/phone` with `exclude_id=user.id`, `exists_by_cedula` with `exclude_user_id=user.id` → `Duplicate*`
-- [ ] Update `user` fields (name, last_name, dni, email, phone, updated_at) and `professional.cedula`, save both repos atomically (same session)
+- [x] Verify admin role, fetch professional+user or raise `ProfessionalNotFound`
+- [x] Validate uniqueness excluding self: `exists_by_email/dni/phone` with `exclude_id=user.id`, `exists_by_cedula` with `exclude_user_id=user.id` → `Duplicate*`
+- [x] Update `user` fields (name, last_name, dni, email, phone, updated_at) and `professional.cedula`, save both repos atomically (same session)
       **Done when:** `docker compose exec api pytest tests/application/test_update_professional.py -v` passes — success updates both tables and `updated_at` changed, duplicate email → `email ya registrado`, duplicate cedula excluding self allowed but other cedula → `Usuario ya registrado`, not found → 404, non-admin → Forbidden.
 
 #### Task 3.4: Implement DeleteProfessional (hard delete)
@@ -128,7 +128,7 @@
 
 - `app/application/use_cases/professional/delete_professional.py`
   **Checkboxes:**
-- [ ] Verify admin, fetch professional+user, call `professional_repo.delete` then `user_repo.delete` (or just `user_repo.delete` with CASCADE), hard delete
+- [x] Verify admin, fetch professional+user, call `professional_repo.delete` then `user_repo.delete` (or just `user_repo.delete` with CASCADE), hard delete
       **Done when:** `docker compose exec api pytest tests/application/test_delete_professional.py -v` passes — success deletes both rows (`SELECT * FROM users WHERE id=:id` → 0, `professionals` → 0), not found → 404, second delete → 404.
 
 #### Task 3.5: Implement Activate and Deactivate Professional
@@ -139,8 +139,8 @@
 - `app/application/use_cases/professional/activate_professional.py`
 - `app/application/use_cases/professional/deactivate_professional.py`
   **Checkboxes:**
-- [ ] `Activate`: verify admin, fetch, if `is_active` true → `AlreadyActiveException("Profesional ya activado")`, else set `True` and save, return detail
-- [ ] `Deactivate`: same but checks `is_active` false → `AlreadyInactiveException("Profesional ya desactivado")`, set `False`, save, verify subsequent login blocked
+- [x] `Activate`: verify admin, fetch, if `is_active` true → `AlreadyActiveException("Profesional ya activado")`, else set `True` and save, return detail
+- [x] `Deactivate`: same but checks `is_active` false → `AlreadyInactiveException("Profesional ya desactivado")`, set `False`, save, verify subsequent login blocked
       **Done when:** `docker compose exec api pytest tests/application/test_activate_professional.py tests/application/test_deactivate_professional.py -v` passes — 6 cases: activate inactive → active, activate already active → 409, deactivate active → inactive, deactivate already inactive → 409, not found → 404, non-admin → 403.
 
 ---
@@ -225,10 +225,10 @@
 - [x] 2.2 PostgresUserRepository exclude_id + delete + updated_at
 - [x] 2.3 Login block for inactive
 - [x] 3.1 ListProfessionals + ListDeactivated
-- [ ] 3.2 GetProfessionalById
-- [ ] 3.3 UpdateProfessional
-- [ ] 3.4 DeleteProfessional
-- [ ] 3.5 Activate/Deactivate
+- [x] 3.2 GetProfessionalById
+- [x] 3.3 UpdateProfessional
+- [x] 3.4 DeleteProfessional
+- [x] 3.5 Activate/Deactivate
 - [ ] 4.1 ProfessionalRouter endpoints
 - [ ] 4.2 Dependencies wiring
 - [ ] 5.1 API integration tests
