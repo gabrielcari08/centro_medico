@@ -95,8 +95,8 @@
 - `app/application/use_cases/professional/list_professionals.py`
 - `app/application/use_cases/professional/list_deactivated_professionals.py`
   **Checkboxes:**
-- [ ] `ListProfessionalsUseCase` with `professional_repo, user_repo` → `execute(search)` calls `professional_repo.list_active(search)` and maps to `ProfessionalDetailResponse`
-- [ ] `ListDeactivatedProfessionalsUseCase` with `execute(current_admin)` → raises `ForbiddenException` if not admin, else calls `list_deactivated()`
+- [x] `ListProfessionalsUseCase` with `professional_repo, user_repo` → `execute(search)` calls `professional_repo.list_active(search)` and maps to `ProfessionalDetailResponse`
+- [x] `ListDeactivatedProfessionalsUseCase` with `execute(current_admin)` → raises `ForbiddenException` if not admin, else calls `list_deactivated()`
       **Done when:** `docker compose exec api pytest tests/application/test_list_professionals.py -v` passes — cases: empty search returns all active ordered A-Z, `search="ANA"` case-insensitive returns 2 with same name, inactive excluded, deactivated list without admin → Forbidden.
 
 #### Task 3.2: Implement GetProfessionalById
@@ -224,7 +224,7 @@
 - [x] 2.1 PostgresProfessionalRepository list/search/delete
 - [x] 2.2 PostgresUserRepository exclude_id + delete + updated_at
 - [x] 2.3 Login block for inactive
-- [ ] 3.1 ListProfessionals + ListDeactivated
+- [x] 3.1 ListProfessionals + ListDeactivated
 - [ ] 3.2 GetProfessionalById
 - [ ] 3.3 UpdateProfessional
 - [ ] 3.4 DeleteProfessional
