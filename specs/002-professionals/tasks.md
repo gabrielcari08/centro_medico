@@ -171,8 +171,8 @@
 
 - `app/entrypoints/api/v1/dependencies.py`
   **Checkboxes:**
-- [ ] Add `get_professional_repository`, `get_list_professionals_use_case`, `get_list_deactivated_use_case`, `get_get_professional_use_case`, `get_update_professional_use_case`, `get_delete_professional_use_case`, `get_activate_professional_use_case`, `get_deactivate_professional_use_case`
-- [ ] Ensure `get_current_admin` still checks `role==administrator` and `is_active` (for deactivated admin edge case)
+- [x] Add `get_professional_repository`, `get_list_professionals_use_case`, `get_list_deactivated_use_case`, `get_get_professional_use_case`, `get_update_professional_use_case`, `get_delete_professional_use_case`, `get_activate_professional_use_case`, `get_deactivate_professional_use_case`
+- [x] Ensure `get_current_admin` still checks `role==administrator` and `is_active` (for deactivated admin edge case)
       **Done when:** `docker compose exec api python -c "from app.entrypoints.api.v1.dependencies import get_list_professionals_use_case, get_update_professional_use_case; print('deps ok')"` passes.
 
 ---
@@ -230,7 +230,7 @@
 - [x] 3.4 DeleteProfessional
 - [x] 3.5 Activate/Deactivate
 - [x] 4.1 ProfessionalRouter endpoints
-- [ ] 4.2 Dependencies wiring
+- [x] 4.2 Dependencies wiring
 - [ ] 5.1 API integration tests
 - [ ] 5.2 Linter/type/coverage gates
 - [ ] 5.3 Docker smoke + manual verification
