@@ -155,13 +155,13 @@
 - `app/entrypoints/api/v1/routes/professional_router.py`
 - `app/entrypoints/api/v1/main.py`
   **Checkboxes:**
-- [ ] `GET /api/v1/professionals` → `ListProfessionalsUseCase`, no auth, `?search=` query, 200 `{items,count}` ordered A-Z, only active
-- [ ] `GET /api/v1/professionals/deactivated` → `ListDeactivatedProfessionalsUseCase` with `Depends(get_current_admin)`, 200 only inactive, 401/403 for non-admin
-- [ ] `GET /api/v1/professionals/{id}` → `GetProfessionalByIdUseCase`, no auth, 200 or 404
-- [ ] `PUT /api/v1/professionals/{id}` → `UpdateProfessionalUseCase` with admin auth, 200 or 400/422/409/404/403
-- [ ] `DELETE /api/v1/professionals/{id}` → `DeleteProfessionalUseCase`, 204, 404/401/403
-- [ ] `PATCH /api/v1/professionals/{id}/activate` and `/deactivate` → respective use cases, 200 or 409 `Profesional ya activado/desactivado`, 404/401/403
-- [ ] Register `professional_router` in `main.py` via `app.include_router`, ensure `RequestValidationError` handler maps `Campos faltantes`→400, `email invalido`/`Formato inválido...`→422, domain exceptions → 409/404/403
+- [x] `GET /api/v1/professionals` → `ListProfessionalsUseCase`, no auth, `?search=` query, 200 `{items,count}` ordered A-Z, only active
+- [x] `GET /api/v1/professionals/deactivated` → `ListDeactivatedProfessionalsUseCase` with `Depends(get_current_admin)`, 200 only inactive, 401/403 for non-admin
+- [x] `GET /api/v1/professionals/{id}` → `GetProfessionalByIdUseCase`, no auth, 200 or 404
+- [x] `PUT /api/v1/professionals/{id}` → `UpdateProfessionalUseCase` with admin auth, 200 or 400/422/409/404/403
+- [x] `DELETE /api/v1/professionals/{id}` → `DeleteProfessionalUseCase`, 204, 404/401/403
+- [x] `PATCH /api/v1/professionals/{id}/activate` and `/deactivate` → respective use cases, 200 or 409 `Profesional ya activado/desactivado`, 404/401/403
+- [x] Register `professional_router` in `main.py` via `app.include_router`, ensure `RequestValidationError` handler maps `Campos faltantes`→400, `email invalido`/`Formato inválido...`→422, domain exceptions → 409/404/403
       **Done when:** `docker compose exec api pytest tests/entrypoints/test_professional_router.py -k "test_public_list" -v` passes for ordering/search, and `docker compose up api -d && curl -s http://localhost:8000/api/v1/professionals | python -c "import json,sys; d=json.load(sys.stdin); assert d['count']>=0; print('public list ok')"` succeeds without token.
 
 #### Task 4.2: Wire dependencies for new use cases
@@ -229,7 +229,7 @@
 - [x] 3.3 UpdateProfessional
 - [x] 3.4 DeleteProfessional
 - [x] 3.5 Activate/Deactivate
-- [ ] 4.1 ProfessionalRouter endpoints
+- [x] 4.1 ProfessionalRouter endpoints
 - [ ] 4.2 Dependencies wiring
 - [ ] 5.1 API integration tests
 - [ ] 5.2 Linter/type/coverage gates

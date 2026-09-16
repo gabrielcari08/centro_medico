@@ -4,14 +4,16 @@ from fastapi import FastAPI, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
-from app.entrypoints.api.v1.routes import auth_router, user_router
+from app.entrypoints.api.v1.routes import auth_router, professional_router, user_router
 from app.infrastructure.config.settings import Settings
 from app.infrastructure.db.base import Base
 from app.infrastructure.db.models.professional_model import ProfessionalModel  # noqa: F401  # registrar tabla
 from app.infrastructure.db.models.user_model import UserModel  # noqa: F401
 from app.infrastructure.db.seed.admin_seed import ensure_admin_exists
 from app.infrastructure.db.session import SessionLocal, engine
-from app.infrastructure.repositories.postgres_user_repository import PostgresUserRepository
+from app.infrastructure.repositories.postgres_user_repository import (
+    PostgresUserRepository,
+)
 from app.infrastructure.services.bcrypt_password_service import BcryptPasswordService
 
 
@@ -41,23 +43,41 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         err_type = err.get("type", "")
         # Campos faltantes -> 400
         if err_type == "missing":
-            return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"detail": "Campos faltantes"})
+            return JSONResponse(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                content={"detail": "Campos faltantes"},
+            )
         # Mensajes custom de Pydantic ya contienen literales del spec
         if "Campos faltantes" in msg:
-            return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"detail": "Campos faltantes"})
+            return JSONResponse(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                content={"detail": "Campos faltantes"},
+            )
         if "email invalido" in msg:
-            return JSONResponse(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content={"detail": "email invalido"})
+            return JSONResponse(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                content={"detail": "email invalido"},
+            )
         if "Formato inválido" in msg:
-            return JSONResponse(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content={"detail": msg.replace("Value error, ", "")})
+            return JSONResponse(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                content={"detail": msg.replace("Value error, ", "")},
+            )
         if "La contraseña" in msg:
-            return JSONResponse(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content={"detail": msg.replace("Value error, ", "")})
+            return JSONResponse(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                content={"detail": msg.replace("Value error, ", "")},
+            )
     # Fallback generico 422 con primer mensaje limpio
     first = errors[0].get("msg", "Validation error").replace("Value error, ", "")
-    return JSONResponse(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content={"detail": first})
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content={"detail": first}
+    )
 
 
 app.include_router(auth_router.router)
 app.include_router(user_router.router)
+app.include_router(professional_router.router)
 
 
 @app.get("/health")

@@ -5,13 +5,38 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 
+from app.application.use_cases.professional.activate_professional import (
+    ActivateProfessionalUseCase,
+)
+from app.application.use_cases.professional.deactivate_professional import (
+    DeactivateProfessionalUseCase,
+)
+from app.application.use_cases.professional.delete_professional import (
+    DeleteProfessionalUseCase,
+)
+from app.application.use_cases.professional.get_professional_by_id import (
+    GetProfessionalByIdUseCase,
+)
+from app.application.use_cases.professional.list_deactivated_professionals import (
+    ListDeactivatedProfessionalsUseCase,
+)
+from app.application.use_cases.professional.list_professionals import (
+    ListProfessionalsUseCase,
+)
+from app.application.use_cases.professional.update_professional import (
+    UpdateProfessionalUseCase,
+)
 from app.application.use_cases.user.create_professional import CreateProfessionalUseCase
 from app.application.use_cases.user.create_receptionist import CreateReceptionistUseCase
 from app.domain.entities.user import UserRole
 from app.infrastructure.config.settings import Settings
 from app.infrastructure.db.session import SessionLocal
-from app.infrastructure.repositories.postgres_professional_repository import PostgresProfessionalRepository
-from app.infrastructure.repositories.postgres_user_repository import PostgresUserRepository
+from app.infrastructure.repositories.postgres_professional_repository import (
+    PostgresProfessionalRepository,
+)
+from app.infrastructure.repositories.postgres_user_repository import (
+    PostgresUserRepository,
+)
 from app.infrastructure.services.bcrypt_password_service import BcryptPasswordService
 
 settings = Settings()
@@ -43,7 +68,9 @@ def get_password_service():
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
     to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    expire = datetime.now(timezone.utc) + (
+        expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    )
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
 
@@ -59,9 +86,13 @@ def get_current_admin(
         email: str | None = payload.get("sub")
         role: str | None = payload.get("role")
         if email is None or role is None:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized"
+            )
     except JWTError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized"
+        )
 
     if role != UserRole.ADMINISTRATOR.value:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden")
@@ -69,7 +100,9 @@ def get_current_admin(
     repo = PostgresUserRepository(db)
     user = repo.get_by_email(email)
     if not user or user.role != UserRole.ADMINISTRATOR:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized"
+        )
     return user
 
 
@@ -86,3 +119,52 @@ def get_create_professional_use_case(
     pwd=Depends(get_password_service),
 ):
     return CreateProfessionalUseCase(repo, prof_repo, pwd)
+
+
+def get_list_professionals_use_case(
+    prof_repo=Depends(get_professional_repository),
+    user_repo=Depends(get_user_repository),
+):
+    return ListProfessionalsUseCase(prof_repo, user_repo)
+
+
+def get_list_deactivated_use_case(
+    prof_repo=Depends(get_professional_repository),
+    user_repo=Depends(get_user_repository),
+):
+    return ListDeactivatedProfessionalsUseCase(prof_repo, user_repo)
+
+
+def get_get_professional_use_case(
+    prof_repo=Depends(get_professional_repository),
+    user_repo=Depends(get_user_repository),
+):
+    return GetProfessionalByIdUseCase(prof_repo, user_repo)
+
+
+def get_update_professional_use_case(
+    prof_repo=Depends(get_professional_repository),
+    user_repo=Depends(get_user_repository),
+):
+    return UpdateProfessionalUseCase(prof_repo, user_repo)
+
+
+def get_delete_professional_use_case(
+    prof_repo=Depends(get_professional_repository),
+    user_repo=Depends(get_user_repository),
+):
+    return DeleteProfessionalUseCase(prof_repo, user_repo)
+
+
+def get_activate_professional_use_case(
+    prof_repo=Depends(get_professional_repository),
+    user_repo=Depends(get_user_repository),
+):
+    return ActivateProfessionalUseCase(prof_repo, user_repo)
+
+
+def get_deactivate_professional_use_case(
+    prof_repo=Depends(get_professional_repository),
+    user_repo=Depends(get_user_repository),
+):
+    return DeactivateProfessionalUseCase(prof_repo, user_repo)
